@@ -2,14 +2,24 @@
 <html>
 
 <head>
-    <title>Data API dan DataTable</title>
+    <title>Data API dan Form</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body>
-    <h1>Data API dan DataTable</h1>
+    <h1>Data API dan Form</h1>
+
+    <form id="add-form">
+        <label for="component">Component:</label>
+        <input type="text" id="component" name="component" required><br>
+
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" required><br>
+
+        <input type="submit" value="Add">
+    </form>
 
     <table id="data-table">
         <thead>
@@ -23,7 +33,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#data-table').DataTable({
+            var dataTable = $('#data-table').DataTable({
                 "ajax": {
                     "url": "https://status.digitalocean.com/api/v2/summary.json",
                     "dataSrc": "components"
@@ -32,6 +42,19 @@
                     { "data": "name" },
                     { "data": "status" }
                 ]
+            });
+
+            $('#add-form').on('submit', function (event) {
+                event.preventDefault();
+
+                var componentInput = $('#component').val();
+                var statusInput = $('#status').val();
+
+                dataTable.row.add([componentInput, statusInput]).draw(false);
+
+                // Reset form fields
+                $('#component').val('');
+                $('#status').val('');
             });
         });
     </script>
