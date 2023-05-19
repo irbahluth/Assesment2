@@ -14,9 +14,11 @@
     <form id="add-form">
         <label for="component">Component:</label>
         <input type="text" id="component" name="component" required><br>
+        <span id="component-error" style="color: red; display: none;">Component is required.</span><br>
 
         <label for="status">Status:</label>
         <input type="text" id="status" name="status" required><br>
+        <span id="status-error" style="color: red; display: none;">Status is required.</span><br>
 
         <input type="submit" value="Add">
     </form>
@@ -50,13 +52,45 @@
                 var componentInput = $('#component').val();
                 var statusInput = $('#status').val();
 
-                dataTable.row.add([componentInput, statusInput]).draw(false);
+                var isValid = true;
 
-                // Reset form fields
-                $('#component').val('');
-                $('#status').val('');
+                if (componentInput.trim() === '') {
+                    $('#component-error').show();
+                    isValid = false;
+                } else {
+                    $('#component-error').hide();
+                }
+
+                if (statusInput.trim() === '') {
+                    $('#status-error').show();
+                    isValid = false;
+                } else {
+                    $('#status-error').hide();
+                }
+                console.log(componentInput, statusInput);
+                if (isValid) {
+                    dataTable.row.add({
+                        "name": componentInput,
+                        "status": statusInput
+                    }).draw(false);
+
+                    // Reset form fields
+                    $('#component').val('');
+                    $('#status').val('');
+                }
             });
         });
+
+        function validateInput() {
+            let x = document.getElementById("numb").value;
+            let text;
+            if (isNaN(x) || x < 1 || x > 10) {
+                text = "Input not valid";
+            } else {
+                text = "Input OK";
+            }
+            document.getElementById("demo").innerHTML = text;
+        }
     </script>
 </body>
 
